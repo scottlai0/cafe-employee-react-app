@@ -7,6 +7,6 @@ export const Route = createFileRoute('/cafes')({
     <>
       <h1>Cafe Management</h1>
       <Divider />
-      <CafePage></CafePage>
+      <CafePage />
     </>,
 })

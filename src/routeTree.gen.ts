@@ -11,17 +11,12 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as EmployeesImport } from './routes/employees'
 import { Route as CafesImport } from './routes/cafes'
 import { Route as IndexImport } from './routes/index'
+import { Route as EmployeesIndexImport } from './routes/employees/index'
+import { Route as EmployeesCafeidImport } from './routes/employees/$cafe_id'
 
 // Create/Update Routes
-
-const EmployeesRoute = EmployeesImport.update({
-  id: '/employees',
-  path: '/employees',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const CafesRoute = CafesImport.update({
   id: '/cafes',
@@ -32,6 +27,18 @@ const CafesRoute = CafesImport.update({
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const EmployeesIndexRoute = EmployeesIndexImport.update({
+  id: '/employees/',
+  path: '/employees/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const EmployeesCafeidRoute = EmployeesCafeidImport.update({
+  id: '/employees/$cafe_id',
+  path: '/employees/$cafe_id',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -53,11 +60,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CafesImport
       parentRoute: typeof rootRoute
     }
-    '/employees': {
-      id: '/employees'
+    '/employees/$cafe_id': {
+      id: '/employees/$cafe_id'
+      path: '/employees/$cafe_id'
+      fullPath: '/employees/$cafe_id'
+      preLoaderRoute: typeof EmployeesCafeidImport
+      parentRoute: typeof rootRoute
+    }
+    '/employees/': {
+      id: '/employees/'
       path: '/employees'
       fullPath: '/employees'
-      preLoaderRoute: typeof EmployeesImport
+      preLoaderRoute: typeof EmployeesIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -68,41 +82,46 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/cafes': typeof CafesRoute
-  '/employees': typeof EmployeesRoute
+  '/employees/$cafe_id': typeof EmployeesCafeidRoute
+  '/employees': typeof EmployeesIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/cafes': typeof CafesRoute
-  '/employees': typeof EmployeesRoute
+  '/employees/$cafe_id': typeof EmployeesCafeidRoute
+  '/employees': typeof EmployeesIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/cafes': typeof CafesRoute
-  '/employees': typeof EmployeesRoute
+  '/employees/$cafe_id': typeof EmployeesCafeidRoute
+  '/employees/': typeof EmployeesIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/cafes' | '/employees'
+  fullPaths: '/' | '/cafes' | '/employees/$cafe_id' | '/employees'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/cafes' | '/employees'
-  id: '__root__' | '/' | '/cafes' | '/employees'
+  to: '/' | '/cafes' | '/employees/$cafe_id' | '/employees'
+  id: '__root__' | '/' | '/cafes' | '/employees/$cafe_id' | '/employees/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CafesRoute: typeof CafesRoute
-  EmployeesRoute: typeof EmployeesRoute
+  EmployeesCafeidRoute: typeof EmployeesCafeidRoute
+  EmployeesIndexRoute: typeof EmployeesIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CafesRoute: CafesRoute,
-  EmployeesRoute: EmployeesRoute
+  EmployeesCafeidRoute: EmployeesCafeidRoute,
+  EmployeesIndexRoute: EmployeesIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -119,7 +138,8 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/cafes",
-        "/employees"
+        "/employees/$cafe_id",
+        "/employees/"
       ]
     },
     "/": {
@@ -128,8 +148,11 @@ export const routeTree = rootRoute
     "/cafes": {
       "filePath": "cafes.tsx"
     },
-    "/employees": {
-      "filePath": "employees.tsx"
+    "/employees/$cafe_id": {
+      "filePath": "employees/$cafe_id.tsx"
+    },
+    "/employees/": {
+      "filePath": "employees/index.tsx"
     }
   }
 }

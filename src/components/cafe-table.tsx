@@ -23,13 +23,20 @@ const CafeGrid = ({ isDarkMode, cafe_data, loading, onEditCafe, onRefresh }) => 
     {
       headerName: 'Logo',
       field: 'logo',
-      cellRenderer: (params) => (
-        params.value ? (
-          <img src={params.value} width="50" height="50" alt="Cafe Logo" />
-        ) : (
-          'No Logo'
-        )
-      ),
+      cellRenderer: (params) => {
+        if (params.value) {
+          return (
+            <img src={`data:image/png;base64,${params.value}`} 
+            width="40" 
+            height="40" 
+            alt="Cafe Logo" />
+          )
+        } else {
+          return (
+            'No Logo'
+          )
+        }
+      },
       width: 100,
     },
     { headerName: 'Name', field: 'name', width: 200 },

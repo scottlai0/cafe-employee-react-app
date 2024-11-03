@@ -110,29 +110,45 @@ export default function AddEditCafeModal({ cafe_data, isEditMode, open, onClose,
         setLogoError('Logo file size must be less than 2 MB');
         setLogo(null);
       } else {
-        setLogoError(''); // Clear error if file is valid
-        setLogo(file); // Store the valid file
+        setLogoError(''); 
+        setLogo(file);
       }
     }
   };
 
   const onSubmit = async (data: any) => {
-    const formData = new FormData();
-    formData.append("name", data.name);
-    formData.append("description", data.description);
-    formData.append("location", data.location);
-
+    const newData: any = {
+      id: cafe_data?.id,
+      name: data.name,
+      description: data.description,
+      location: data.location,
+      logo: null
+    }
+  
     if (logo) {
-      formData.append("logo", logo); // Attach the file as 'logo' to form data
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        // Convert the file to byte data (ArrayBuffer)
+        const byteData = reader.result as ArrayBuffer; // Ensure result is treated as ArrayBuffer
+        const byteArray = new Uint8Array(byteData); // Convert ArrayBuffer to Uint8Array
+  
+        // Convert byte array to string
+        const stringData = Array.from(byteArray)
+          .map(byte => String.fromCharCode(byte))
+          .join('');
+
+        // Encode the string to base64
+        const encodedLogo = btoa(stringData);
+        newData.logo = encodedLogo;
+  
+        mutation.mutate(newData);
+      };
+      reader.readAsArrayBuffer(logo); 
+      // Read the logo file as an ArrayBuffer
+    
+    } else {
+      mutation.mutate(newData);
     }
-
-    console.log(logo)
-
-    if (isEditMode) {
-      formData.append("id", cafe_data.id); // Add the ID if editing
-    }
-
-    mutation.mutate(formData); // Pass FormData to mutation
   };
 
 

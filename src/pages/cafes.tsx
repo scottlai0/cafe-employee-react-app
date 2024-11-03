@@ -1,9 +1,14 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+
 import CafeGrid from "../components/cafe-table";
-import { fetchCafes } from "../services/cafes-service";
 import AddEditCafeModal from "../components/add-edit-cafe-modal";
+
+import { fetchCafes } from "../services/cafes-service";
+
+
 import { Box, Button, CircularProgress, TextField, useTheme } from "@mui/material";
+
 import AddHomeWorkTwoToneIcon from '@mui/icons-material/AddHomeWorkTwoTone';
 import SearchIcon from '@mui/icons-material/Search';
 
@@ -43,6 +48,7 @@ const CafePage = () => {
 
   // Filter cafes based on search term
   const filtered_data = data?.filter(cafe =>
+		cafe.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
     cafe.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     cafe.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
     cafe.location.toLowerCase().includes(searchTerm.toLowerCase())
