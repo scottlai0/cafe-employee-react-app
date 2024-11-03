@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { axiosInstance } from "./axios-instance";
 
 const dummy_data = [
   {
@@ -11,21 +11,20 @@ const dummy_data = [
 ]
 
 export const fetchCafes = async () => {
-  //const response = await axios.get('/cafes');
-  const response = {data: dummy_data}
+  const response = await axiosInstance.get('/cafes');
   return response.data;
 };
 
 export const deleteCafe = async (id: any) => {
-  await axios.delete(`/cafes/${id}`);
+  await axiosInstance.delete(`/cafes/${id}`);
 };
 
 export const addCafe = async (cafeData: any) => {
-  const response = await axios.post('/cafes', cafeData);
+  const response = await axiosInstance.post('/cafes', cafeData);
   return response.data;
 };
 
 export const updateCafe = async (cafeData: any) => {
-  const response = await axios.put(`/cafes/${cafeData.id}`, cafeData);
+  const response = await axiosInstance.put(`/cafes/${cafeData.id}`, cafeData);
   return response.data;
 };
