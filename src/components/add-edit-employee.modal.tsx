@@ -81,7 +81,7 @@ export default function AddEditEmployeeModal({
       setValue('phone_number', employee_data.phone_number || '');
       setValue('gender', employee_data.gender || '');
       setValue('cafe_id', employee_data.cafe_id || selected_cafe_info?.id || null);
-      setValue('cafe_name', null);
+      setValue('cafe_name', employee_data.cafe_name || selected_cafe_info?.name || null);
       setValue('start_date', employee_data.start_date || null);
       setValue('end_date', employee_data.end_date || null)
     } else {
@@ -121,6 +121,7 @@ export default function AddEditEmployeeModal({
       phone_number: data.phone_number.toString(),
       gender: data.gender,
       cafe_id: data.cafe_id,
+      cafe_name: data.cafe_name,
       start_date: data.start_date,
       end_date: data.end_date
     }
@@ -132,7 +133,6 @@ export default function AddEditEmployeeModal({
 
   // Cafe Dropdown config 
   const handleCafeNameChange = (event, new_value) => {
-    console.log(new_value)
     if (new_value) {
       setValue('cafe_id', new_value.id)
     } else {
@@ -177,19 +177,37 @@ export default function AddEditEmployeeModal({
               />
               <TextField
                 label="Email"
-                {...register('email_address', { required: '* Email is required' })}
+                {...register('email_address', { 
+                  required: '* Email is required',
+                  pattern: {
+                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                    message: 'Invalid email format.'
+                  }
+                })}
                 error={!!errors.email_address}
                 helperText={errors.email_address ? errors.email_address.message : ''}
               />
               <TextField
                 label="Phone Number"
-                {...register('phone_number', { required: '* Phone number is required' })}
+                {...register('phone_number', { 
+                  required: '* Phone number is required',
+                  pattern: {
+                    value: /^[89]\d{7}$/,
+                    message: 'Invalid phone number format.'
+                  }
+                })}
                 error={!!errors.phone_number}
                 helperText={errors.phone_number ? errors.phone_number.message : ''}
               />
               <TextField
                 label="Gender"
-                {...register('gender', { required: '* Gender is required' })}
+                {...register('gender', { 
+                  required: '* Gender is required',
+                  pattern: {
+                    value: /^[MF]$/,
+                    message: 'Enter M for male and F for female.'
+                  }
+                })}
                 error={!!errors.gender}
                 helperText={errors.gender ? errors.gender.message : ''}
               />
