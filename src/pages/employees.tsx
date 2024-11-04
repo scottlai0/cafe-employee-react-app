@@ -94,7 +94,11 @@ export const EmployeePageTemplate = (cafe_id: string | null = null) => {
   } else {
     return (
       <>
-        {cafe_id?.cafe_id}
+        <>
+          { cafe_id.cafe_id ? <p>Displaying Employees for: <b>{selected_cafe_info?.name} - {selected_cafe_info?.id}</b> only.</p> : 
+          <p>Displaying all employee data.</p>
+          }
+        </>
         <Box sx={{ display: 'flex', py: 2, justifyContent: 'space-between', gap: 2 }}>
           <Button variant="contained" onClick={handleOpenModal}>
             <AddHomeWorkTwoToneIcon sx={{ mr: 1 }} />

@@ -66,11 +66,13 @@ export default function AddEditEmployeeModal({
     setValue('phone_number', '');
     setValue('gender', '');
     setValue('cafe_id', selected_cafe_info?.id || '');
+    setValue('cafe_name', selected_cafe_info?.name || '');
     setValue('start_date', null);
     setValue('end_date', null);
   }
 
   const cafe_id = watch('cafe_id')
+  const cafe_name = watch('cafe_name')
 
   useEffect(() => {
     // Prefill values only if in edit mode and employee_data exists
@@ -134,12 +136,14 @@ export default function AddEditEmployeeModal({
   // Cafe Dropdown config 
   const handleCafeNameChange = (event, new_value) => {
     if (new_value) {
-      setValue('cafe_id', new_value.id)
+      setValue('cafe_id', new_value.id);
+      setValue('cafe_name', new_value.name); // Add this line to set cafe_name
     } else {
-      setValue('cafe_id', '')
+      setValue('cafe_id', '');
+      setValue('cafe_name', ''); // Also clear cafe_name when no cafe is selected
     }
   }
-
+  
   return (
     <div>
       <Modal
@@ -224,14 +228,15 @@ export default function AddEditEmployeeModal({
                 />
                 <Autocomplete
                   id="cafe_dropdown"
-                  value={selected_cafe_info?.name}
+                  // Set value to the entire object if available, otherwise null
+                  value={cafe_options?.find(option => option.name === cafe_name) || null}
                   sx={{ width: '100%' }}
                   options={cafe_options}
-                  getOptionLabel={(option => option.name || '')}
+                  getOptionLabel={(option) => option.name || ''}
                   renderInput={(params) => (
                     <TextField {...params} label="Cafe Name" />
                   )}
-                  disabled={ !!selected_cafe_info?.id }
+                  disabled={!!selected_cafe_info?.id}
                   onChange={handleCafeNameChange}
                 />
               </Box>
