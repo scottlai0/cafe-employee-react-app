@@ -26,7 +26,7 @@ const ConfirmDeleteEmployeeModal = ({ open, onClose, onConfirm, selectedEmployee
           </Typography>
           <Box sx={{ display: 'flex', flexDirection: 'column', mt: 3, gap: 2, width: '100%' }}>
             <TextField
-              label="Cafe ID"
+              label="Employee ID"
               value={selectedEmployee?.id || ''} // Use id for Cafe ID
               disabled={true}
             />
@@ -36,13 +36,18 @@ const ConfirmDeleteEmployeeModal = ({ open, onClose, onConfirm, selectedEmployee
               disabled={true}
             />
             <TextField 
-              label="Description"
-              value={selectedEmployee?.description || ''}
+              label="Email Address"
+              value={selectedEmployee?.email_address || ''}
               disabled={true}
             />
             <TextField 
-              label="Location"
-              value={selectedEmployee?.location || ''}
+              label="Phone Number"
+              value={selectedEmployee?.phone_number || ''}
+              disabled={true}
+            />
+            <TextField 
+              label="Gender"
+              value={selectedEmployee?.gender || ''}
               disabled={true}
             />
           </Box>

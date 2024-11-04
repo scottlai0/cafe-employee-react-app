@@ -114,18 +114,18 @@ export default function AddEditEmployeeModal({
 
 
   const onSubmit = async (data: any) => {
-    console.log(data)
     const newData: any = {
       id: employee_data?.id,
       name: data.name,
       email_address: data.email_address,
-      phone_number: data.phone_number,
+      phone_number: data.phone_number.toString(),
       gender: data.gender,
       cafe_id: data.cafe_id,
       start_date: data.start_date,
       end_date: data.end_date
     }
 
+    console.log(newData)
 
     mutation.mutate(newData);
   };
@@ -202,7 +202,7 @@ export default function AddEditEmployeeModal({
                   sx = {{ width: '40%' }}
                   label="Cafe ID"
                   disabled={true}
-                  value={cafe_id?.id}
+                  value={cafe_id ? cafe_id : ''}
                 />
                 <Autocomplete
                   id="cafe_dropdown"
@@ -228,7 +228,14 @@ export default function AddEditEmployeeModal({
                     sx={{ width: '100%' }} 
                     label="Start Date"
                   />
-                  <DatePicker sx={{ width: '100%' }} label="End Date" />
+                  <DatePicker 
+                    onChange={(date) => {
+                      const formatted_date = date.toISOString().split('T')[0]
+                      setValue('end_date', formatted_date)
+                    }}
+                    sx={{ width: '100%' }} 
+                    label="End Date" 
+                  />
                 </LocalizationProvider>
               </Box>
               
