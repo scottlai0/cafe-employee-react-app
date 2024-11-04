@@ -1,20 +1,20 @@
-import axios from 'axios';
+import { axiosInstance } from './axios-instance';
 
 export const fetchEmployees = async () => {
-  const response = await axios.get('/employees'); 
+  const response = await axiosInstance.get('/employees'); 
   return response.data;
 };
 
 export const deleteEmployee = async (id: any) => {
-  await axios.delete(`/employees/${id}`); 
+  return await axiosInstance.delete(`/employees/${id}`); 
 };
 
 export const addEmployee = async (employeeData: any) => {
-  const response = await axios.post('/employees', employeeData); 
+  const response = await axiosInstance.post('/employees', employeeData); 
   return response.data;
 };
 
 export const updateEmployee = async (employeeData: any) => {
-  const response = await axios.put(`/employees/${employeeData.id}`, employeeData); 
+  const response = await axiosInstance.put(`/employees`, employeeData); 
   return response.data;
 };

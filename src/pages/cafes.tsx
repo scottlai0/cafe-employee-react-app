@@ -61,43 +61,43 @@ const CafePage = () => {
         <p>Loading cafes...</p>
       </Box>
     );
-  }
-
-  if (error) return <p>Error loading cafes: {error.message}</p>;
-
-  return (
-    <>
-      <Box sx={{ display: 'flex', py: 2, justifyContent: 'space-between', gap: 2 }}>
-        <Button variant="contained" onClick={handleOpenModal}>
-          <AddHomeWorkTwoToneIcon sx={{ mr: 1 }} />
-          Add New Café
-        </Button>
-        <TextField
-          variant="outlined"
-          size="small"
-          placeholder="Search..."
-          onChange={(e) => setSearchTerm(e.target.value)}
-          InputProps={{
-            endAdornment: <SearchIcon />,
-          }}
+  } else if (error) {
+    return <p>Error loading cafes: {error.message}</p>;
+  } else {
+    return (
+      <>
+        <Box sx={{ display: 'flex', py: 2, justifyContent: 'space-between', gap: 2 }}>
+          <Button variant="contained" onClick={handleOpenModal}>
+            <AddHomeWorkTwoToneIcon sx={{ mr: 1 }} />
+            Add New Café
+          </Button>
+          <TextField
+            variant="outlined"
+            size="small"
+            placeholder="Search..."
+            onChange={(e) => setSearchTerm(e.target.value)}
+            InputProps={{
+              endAdornment: <SearchIcon />,
+            }}
+          />
+        </Box>
+        <CafeGrid 
+          isDarkMode={isDarkMode} 
+          cafe_data={filtered_data} 
+          loading={isLoading} 
+          onEditCafe={handleEditCafe}
+          onRefresh={refetch} // Pass the refetch function to CafeGrid
         />
-      </Box>
-      <CafeGrid 
-        isDarkMode={isDarkMode} 
-        cafe_data={filtered_data} 
-        loading={isLoading} 
-        onEditCafe={handleEditCafe}
-        onRefresh={refetch} // Pass the refetch function to CafeGrid
-      />
-      <AddEditCafeModal 
-        cafe_data={selectedCafe} 
-        isEditMode={isEditMode} 
-        open={isModalOpen} 
-        onClose={handleCloseModal} 
-        onSuccess={refetch} // Call refetch on success
-      />
-    </>
-  );
+        <AddEditCafeModal 
+          cafe_data={selectedCafe} 
+          isEditMode={isEditMode} 
+          open={isModalOpen} 
+          onClose={handleCloseModal} 
+          onSuccess={refetch} // Call refetch on success
+        />
+      </>
+    );
+  }
 };
 
 export default CafePage;

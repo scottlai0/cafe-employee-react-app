@@ -234,7 +234,13 @@ export default function AddEditCafeModal({ cafe_data, isEditMode, open, onClose,
                   >
                     {isEditMode ? 'Update Cafe' : 'Add Cafe'}
                   </Button>
-                  <Button color="secondary" variant="contained" onClick={handleCloseModal}>Close</Button>
+                  <Button 
+                    color="secondary" 
+                    variant="contained" 
+                    onClick={handleCloseModal}
+                  >
+                    Close
+                  </Button>
                 </ThemeProvider>
               </Box>
             </FormControl>

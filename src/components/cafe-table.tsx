@@ -6,11 +6,13 @@ import { Button } from '@mui/material';
 import { useNavigate } from '@tanstack/react-router';
 import { deleteCafe } from '../services/cafes-service';
 import { useState } from 'react';
-import ConfirmDeleteModal from './confirm-delete-cafe-modal';
+import ConfirmDeleteCafeModal from './confirm-delete-cafe-modal';
 
 const CafeGrid = ({ isDarkMode, cafe_data, loading, onEditCafe, onRefresh }) => {
+  
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [selectedCafe, setSelectedCafe] = useState(null);
+  
   const navigate = useNavigate();
 
   const theme = isDarkMode === 'dark' ? 'ag-theme-alpine-dark' : 'ag-theme-alpine';
@@ -93,7 +95,7 @@ const CafeGrid = ({ isDarkMode, cafe_data, loading, onEditCafe, onRefresh }) => 
           paginationPageSize={10}
         />
       </div>
-      <ConfirmDeleteModal
+      <ConfirmDeleteCafeModal
         open={openDeleteModal}
         onClose={() => setOpenDeleteModal(false)}
         onConfirm={handleConfirmDelete}

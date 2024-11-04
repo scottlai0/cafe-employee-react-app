@@ -1,37 +1,85 @@
+import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import { AgGridReact } from 'ag-grid-react';
+
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
+
 import { Button } from '@mui/material';
 import { deleteEmployee } from '../services/employees-service';
-import { useState } from 'react';
-import ConfirmDeleteModal from './confirm-delete-cafe-modal';
 
-const EmployeeGrid = ({ isDarkMode, employee_data, loading, onEditEmployee, onRefresh }) => {
+import ConfirmDeleteEmployeeModal from './confirm-delete-employee-modal';
+
+const EmployeeGrid = forwardRef(({ 
+  isDarkMode, 
+  employee_data, 
+  loading, 
+  onEditEmployee, 
+  onRefresh
+}, ref) => {
+
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
-
-  const theme = isDarkMode === 'dark' ? 'ag-theme-alpine-dark' : 'ag-theme-alpine';
-
+  
   const columnDefs = [
     {
-      headerName: 'Employee ID',
-      field: 'id',
+      headerName: 'Employee',
+      children: [
+        {
+          headerName: 'ID',
+          field: 'id',
+          minWidth: 120
+        },
+        {
+          headerName: 'Name',
+          field: 'name',
+          minWidth: 140
+        },
+        {
+          headerName: 'Phone Number',
+          field: 'phone_number',
+          minWidth: 140
+        },
+        {
+          headerName: 'Gender',
+          field: 'gender',
+          mindWith: 80
+        },
+      ]
     },
     {
-      headerName: 'Name',
-      field: 'name',
+      headerName: 'Cafe',
+      field: 'cafe_name',
+      cellRenderer: (params) => {
+        return params.value ? params.value : '-';
+      },
+      tooltipValueGetter: (params) => `Cafe ID: ${params.data.cafe_id}`,
+      minWidth: 150
     },
     {
-      headerName: 'Phone Number',
-      field: 'phone_number',
-    },
-    {
-      headerName: 'Gender',
-      field: 'gender'
-    },
-    {
-      headerName: 'Employee Name',
-      field: 'Employee_name'
+      headerName: 'Employment Details',
+      children: [
+        {
+          headerName: 'Start Date',
+          field: 'start_date',
+          cellRenderer: (params) => {
+            return params.value ? params.value : '-';
+          },
+          minWidth: 120
+        },
+        {
+          headerName: 'End Date',
+          field: 'end_date',
+          cellRenderer: (params) => {
+            return params.value ? params.value : '-';
+          },
+          minWidth: 120
+        },
+        {
+          headerName: 'Days Worked',
+          field: 'days_worked',
+          minWidth: 120
+        }
+      ]
     },
     {
       headerName: 'Actions',
@@ -48,6 +96,7 @@ const EmployeeGrid = ({ isDarkMode, employee_data, loading, onEditEmployee, onRe
           </Button>
         </>
       ),
+      minWidth: 200
     },
   ];
 
@@ -61,25 +110,34 @@ const EmployeeGrid = ({ isDarkMode, employee_data, loading, onEditEmployee, onRe
     }
   };
 
+  const theme = isDarkMode === 'dark' ? 'ag-theme-alpine-dark' : 'ag-theme-alpine';
+  
   return (
-    <>
-      <div className={theme} style={{ height: 600, width: '100%' }}>
-        <AgGridReact
-          rowData={employee_data} // Use employee_data directly from props
-          columnDefs={columnDefs}
-          loading={loading}
-          pagination
-          paginationPageSize={10}
-        />
-      </div>
-      <ConfirmDeleteModal
+    <div className={theme} style={{ height: 600, width: '100%' }}>
+      <AgGridReact
+        ref={ref} // Attaching ref for employees.tsx resize button to access this grid API
+        rowData={employee_data}
+        columnDefs={columnDefs}
+        loading={loading}
+        pagination
+        paginationPageSize={10}
+        defaultColDef={{
+          flex: 1,
+          minWidth: 100,
+          resizable: true,
+        }}
+        gridOptions={{
+          tooltipShowDelay: 0
+        }}
+      />
+      <ConfirmDeleteEmployeeModal
         open={openDeleteModal}
         onClose={() => setOpenDeleteModal(false)}
         onConfirm={handleConfirmDelete}
         selectedEmployee={selectedEmployee}
       />
-    </>
+    </div>
   );
-};
+});
 
 export default EmployeeGrid;

@@ -12,7 +12,7 @@ const style = {
   p: 4,
 };
 
-const ConfirmDeleteCafeModal = ({ open, onClose, onConfirm, selectedCafe }) => {
+const ConfirmDeleteEmployeeModal = ({ open, onClose, onConfirm, selectedEmployee }) => {
   return (
     <Modal open={open} onClose={onClose}>
       <Box sx={style}>
@@ -27,22 +27,22 @@ const ConfirmDeleteCafeModal = ({ open, onClose, onConfirm, selectedCafe }) => {
           <Box sx={{ display: 'flex', flexDirection: 'column', mt: 3, gap: 2, width: '100%' }}>
             <TextField
               label="Cafe ID"
-              value={selectedCafe?.id || ''} // Use id for Cafe ID
+              value={selectedEmployee?.id || ''} // Use id for Cafe ID
               disabled={true}
             />
             <TextField
               label="Name"
-              value={selectedCafe?.name || ''}
+              value={selectedEmployee?.name || ''}
               disabled={true}
             />
             <TextField 
               label="Description"
-              value={selectedCafe?.description || ''}
+              value={selectedEmployee?.description || ''}
               disabled={true}
             />
             <TextField 
               label="Location"
-              value={selectedCafe?.location || ''}
+              value={selectedEmployee?.location || ''}
               disabled={true}
             />
           </Box>
@@ -59,7 +59,7 @@ const ConfirmDeleteCafeModal = ({ open, onClose, onConfirm, selectedCafe }) => {
           <Button 
             variant="outlined"
             onClick={() => {
-              onConfirm(selectedCafe?.id); // Pass the cafe ID to the onConfirm function
+              onConfirm(selectedEmployee?.id);
             }} 
             color="secondary"
           >
@@ -71,4 +71,4 @@ const ConfirmDeleteCafeModal = ({ open, onClose, onConfirm, selectedCafe }) => {
   );
 };
 
-export default ConfirmDeleteCafeModal;
+export default ConfirmDeleteEmployeeModal;
