@@ -1,4 +1,5 @@
 {
+  "homepage": "http://scottlai0.githtub.io/cafe-employee-react-app",
   "name": "gui",
   "private": true,
   "version": "0.0.0",
@@ -7,7 +8,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
@@ -22,6 +25,7 @@
     "ag-grid-react": "^32.3.2",
     "axios": "^1.7.7",
     "dayjs": "^1.11.13",
+    "gh-pages": "^6.2.0",
     "react": "^18.3.1",
     "react-devtools": "^6.0.1",
     "react-dom": "^18.3.1",
