@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useRef, useState } from 'react';
+import { forwardRef, useState } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 
 import 'ag-grid-community/styles/ag-grid.css';
@@ -15,7 +15,7 @@ const EmployeeGrid = forwardRef(({
   loading, 
   onEditEmployee, 
   onRefresh
-}, ref) => {
+}: any, ref: any) => {
 
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
@@ -49,10 +49,10 @@ const EmployeeGrid = forwardRef(({
     {
       headerName: 'Cafe',
       field: 'cafe_name',
-      cellRenderer: (params) => {
+      cellRenderer: (params: any) => {
         return params.value ? params.value : '-';
       },
-      tooltipValueGetter: (params) => `Cafe ID: ${params.data.cafe_id}`,
+      tooltipValueGetter: (params: any) => `Cafe ID: ${params.data.cafe_id}`,
       minWidth: 150
     },
     {
@@ -61,7 +61,7 @@ const EmployeeGrid = forwardRef(({
         {
           headerName: 'Start Date',
           field: 'start_date',
-          cellRenderer: (params) => {
+          cellRenderer: (params: any) => {
             return params.value ? params.value : '-';
           },
           minWidth: 120
@@ -69,7 +69,7 @@ const EmployeeGrid = forwardRef(({
         {
           headerName: 'End Date',
           field: 'end_date',
-          cellRenderer: (params) => {
+          cellRenderer: (params: any) => {
             return params.value ? params.value : '-';
           },
           minWidth: 120
@@ -83,7 +83,7 @@ const EmployeeGrid = forwardRef(({
     },
     {
       headerName: 'Actions',
-      cellRenderer: (params) => (
+      cellRenderer: (params: any) => (
         <>
           <Button onClick={() => onEditEmployee(params.data)}>Edit</Button>
           <Button
@@ -102,7 +102,7 @@ const EmployeeGrid = forwardRef(({
 
   const handleConfirmDelete = async () => {
     if (selectedEmployee) {
-      await deleteEmployee(selectedEmployee.id);
+      await deleteEmployee((selectedEmployee as any).id);
       setOpenDeleteModal(false);
       setSelectedEmployee(null);
       // Call the onRefresh function to refresh the data after deletion

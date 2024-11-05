@@ -12,7 +12,7 @@ const style = {
   p: 4,
 };
 
-const ConfirmDeleteEmployeeModal = ({ open, onClose, onConfirm, selectedEmployee }) => {
+const ConfirmDeleteEmployeeModal = ({ open, onClose, onConfirm, selectedEmployee }: any) => {
   return (
     <Modal open={open} onClose={onClose}>
       <Box sx={style}>

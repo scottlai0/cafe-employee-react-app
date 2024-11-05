@@ -59,7 +59,7 @@ export const EmployeePageTemplate = (cafe_id: any = null) => {
   const selected_cafe_info = cafe_id?.cafe_id ? cafe_data?.filter((e: any) => e.id === cafe_id.cafe_id)[0] : null
 
   // Filter cafes based on search term
-  const search_filtered_data = filtered_data?.filter(employee =>
+  const search_filtered_data = filtered_data?.filter((employee: any) =>
     employee.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
     employee.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     employee.phone_number.toString().includes(searchTerm.toLowerCase()) ||

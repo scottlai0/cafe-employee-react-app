@@ -1,5 +1,4 @@
 import LocalCafeIcon from '@mui/icons-material/LocalCafe';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import BadgeIcon from '@mui/icons-material/Badge';
 
 import { Navigation } from '@toolpad/core/AppProvider';

@@ -8,7 +8,7 @@ import { deleteCafe } from '../services/cafes-service';
 import { useState } from 'react';
 import ConfirmDeleteCafeModal from './confirm-delete-cafe-modal';
 
-const CafeGrid = ({ isDarkMode, cafe_data, loading, onEditCafe, onRefresh }) => {
+const CafeGrid = ({ isDarkMode, cafe_data, loading, onEditCafe, onRefresh }: any) => {
   
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [selectedCafe, setSelectedCafe] = useState(null);
@@ -25,7 +25,7 @@ const CafeGrid = ({ isDarkMode, cafe_data, loading, onEditCafe, onRefresh }) => 
     {
       headerName: 'Logo',
       field: 'logo',
-      cellRenderer: (params) => {
+      cellRenderer: (params: any) => {
         if (params.value) {
           return (
             <img src={`data:image/png;base64,${params.value}`} 
@@ -47,7 +47,7 @@ const CafeGrid = ({ isDarkMode, cafe_data, loading, onEditCafe, onRefresh }) => 
     {
       headerName: 'Employees',
       field: 'employees',
-      cellRenderer: (params) => (
+      cellRenderer: (params: any) => (
         <>
           <Button onClick={() => navigate({ to: `/employees/${params.data.id}` })}>
             <OpenInNewIcon sx={{ fontSize: 'medium' }} />
@@ -58,7 +58,7 @@ const CafeGrid = ({ isDarkMode, cafe_data, loading, onEditCafe, onRefresh }) => 
     },
     {
       headerName: 'Actions',
-      cellRenderer: (params) => (
+      cellRenderer: (params: any) => (
         <>
           <Button onClick={() => onEditCafe(params.data)}>Edit</Button>
           <Button
@@ -76,7 +76,7 @@ const CafeGrid = ({ isDarkMode, cafe_data, loading, onEditCafe, onRefresh }) => 
 
   const handleConfirmDelete = async () => {
     if (selectedCafe) {
-      await deleteCafe(selectedCafe.id);
+      await deleteCafe((selectedCafe as any).id);
       setOpenDeleteModal(false);
       setSelectedCafe(null);
       // Call the onRefresh function to refresh the data after deletion

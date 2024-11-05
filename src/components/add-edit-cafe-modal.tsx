@@ -50,8 +50,8 @@ const buttonTheme = createTheme({
 });
 
 
-export default function AddEditCafeModal({ cafe_data, isEditMode, open, onClose, onSuccess }) {
-  const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm();
+export default function AddEditCafeModal({ cafe_data, isEditMode, open, onClose, onSuccess }: any) {
+  const { register, handleSubmit, setValue, watch, formState: { errors } }: any = useForm();
 
   // State to hold logo file
   const [logo, setLogo] = useState<File | null>(null);
@@ -177,6 +177,7 @@ export default function AddEditCafeModal({ cafe_data, isEditMode, open, onClose,
           if (reason !== 'backdropClick') {
             onClose();
           }
+          return event
         }}
       >
         <Box sx={style}>

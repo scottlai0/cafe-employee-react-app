@@ -12,7 +12,7 @@ const style = {
   p: 4,
 };
 
-const ConfirmDeleteCafeModal = ({ open, onClose, onConfirm, selectedCafe }) => {
+const ConfirmDeleteCafeModal = ({ open, onClose, onConfirm, selectedCafe }: any) => {
   return (
     <Modal open={open} onClose={onClose}>
       <Box sx={style}>

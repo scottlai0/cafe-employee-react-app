@@ -45,8 +45,8 @@ export default function AddEditEmployeeModal({
   open, 
   onClose, 
   onSuccess,
-}) {
-  const { register, handleSubmit, setValue, watch, control, formState: { errors } } = useForm();
+}: any) {
+  const { register, handleSubmit, setValue, watch, control, formState: { errors } }: any = useForm();
   
   const cafe_options = cafe_data?.map((e: any) => ({ id: e.id, name: e.name }));
   
@@ -97,7 +97,7 @@ export default function AddEditEmployeeModal({
   });
 
   const onSubmit = async (data: any) => {
-    const newData = {
+    const newData: any = {
       employee_id: employee_data?.id,
       name: data.name,
       email_address: data.email_address,
@@ -108,13 +108,16 @@ export default function AddEditEmployeeModal({
       start_date: data.start_date,
       end_date: data.end_date,
     };
+    
     console.log(newData)
     mutation.mutate(newData);
   };
 
-  const handleCafeNameChange = (event, new_value) => {
+  const handleCafeNameChange = (event: any, new_value: any) => {
     setValue('cafe_id', new_value ? new_value.id : '');
     setValue('cafe_name', new_value ? new_value.name : '');
+
+    return event;
   };
 
   return (
@@ -125,6 +128,7 @@ export default function AddEditEmployeeModal({
           if (reason !== 'backdropClick') {
             onClose();
           }
+          return event
         }}
       >
         <Box sx={style}>
@@ -164,7 +168,7 @@ export default function AddEditEmployeeModal({
                   }
                 })}
                 error={!!errors.name}
-                helperText={errors.name ? errors.name.message : ''}
+                helperText={errors.name ? errors.name?.message : ''}
               />
               <TextField
                 label="Email"
@@ -176,7 +180,7 @@ export default function AddEditEmployeeModal({
                   }
                 })}
                 error={!!errors.email_address}
-                helperText={errors.email_address ? errors.email_address.message : ''}
+                helperText={errors.email_address ? errors.email_address?.message : ''}
               />
               <TextField
                 label="Phone Number"
@@ -188,7 +192,7 @@ export default function AddEditEmployeeModal({
                   }
                 })}
                 error={!!errors.phone_number}
-                helperText={errors.phone_number ? errors.phone_number.message : ''}
+                helperText={errors.phone_number ? errors.phone_number?.message : ''}
               />
               <FormControl>
                 <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel>
@@ -210,7 +214,7 @@ export default function AddEditEmployeeModal({
                 />
                 {errors.gender && (
                   <Typography variant="body2" color="error">
-                    {errors.gender.message}
+                    {(errors as any).gender.message}
                   </Typography>
                 )}
               </FormControl>
@@ -226,7 +230,7 @@ export default function AddEditEmployeeModal({
                 />
                 <Autocomplete
                   id="cafe_dropdown"
-                  value={cafe_options?.find(option => option.name === watch('cafe_name')) || null}
+                  value={cafe_options?.find((option: any) => option.name === watch('cafe_name')) || null}
                   sx={{ width: '100%' }}
                   options={cafe_options}
                   getOptionLabel={(option) => option.name || ''}
