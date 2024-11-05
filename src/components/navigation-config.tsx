@@ -10,12 +10,12 @@ const NAVIGATION: Navigation = [
 		title: 'Navigation',
 	},
 	{
-		segment: 'cafe-employee-react-app/cafes',
+		segment: 'cafes',
 		title: 'Cafes',
 		icon: <LocalCafeIcon />,
 	},
 	{
-		segment: 'cafe-employee-react-app/employees',
+		segment: 'employees',
 		title: 'Employees',
 		icon: <BadgeIcon />,
 	},
