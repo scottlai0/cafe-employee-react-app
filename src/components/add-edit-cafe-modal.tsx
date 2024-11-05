@@ -211,8 +211,8 @@ export default function AddEditCafeModal({ cafe_data, isEditMode, open, onClose,
                     message: 'Minimum character count is 6.'
                   },
                   maxLength: {
-                    value: 10,
-                    message: 'Maximum character count is 10.'
+                    value: 50,
+                    message: 'Maximum character count is 50.'
                   }
                 })}
                 error={!!errors.name}
