@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import CafeGrid from "../components/cafe-table";
@@ -29,7 +29,7 @@ const CafePage = () => {
     setIsModalOpen(true);
   };
 
-  const handleEditCafe = (cafe_row_data) => {
+  const handleEditCafe = (cafe_row_data: any) => {
     setIsEditMode(true);
     setSelectedCafe(cafe_row_data);
     setIsModalOpen(true);
@@ -47,7 +47,7 @@ const CafePage = () => {
   });
 
   // Filter cafes based on search term
-  const filtered_data = data?.filter(cafe =>
+  const filtered_data = data?.filter((cafe: any) =>
 		cafe.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
     cafe.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     cafe.description.toLowerCase().includes(searchTerm.toLowerCase()) ||

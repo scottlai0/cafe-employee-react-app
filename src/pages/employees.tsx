@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Box, Button, CircularProgress, TextField, Typography, useTheme } from '@mui/material';
+import { Box, Button, CircularProgress, TextField, useTheme } from '@mui/material';
 import { fetchEmployees } from '../services/employees-service';
 import EmployeeGrid from '../components/employee-table';
 import AddHomeWorkTwoToneIcon from '@mui/icons-material/AddHomeWorkTwoTone';
@@ -10,9 +10,8 @@ import AddEditEmployeeModal from '../components/add-edit-employee.modal';
 import { AgGridReact } from 'ag-grid-react'; // Import AgGridReact
 
 
-export const EmployeePageTemplate = (cafe_id: string | null = null) => {
+export const EmployeePageTemplate = (cafe_id: any = null) => {
 
-  const isDarkMode = useTheme().palette.mode;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -25,7 +24,7 @@ export const EmployeePageTemplate = (cafe_id: string | null = null) => {
     setIsModalOpen(true);
   };
 
-  const handleEditCafe = (employee_row_data) => {
+  const handleEditCafe = (employee_row_data: any) => {
     setIsEditMode(true);
     setSelectedEmployee(employee_row_data);
     setIsModalOpen(true);
@@ -40,7 +39,6 @@ export const EmployeePageTemplate = (cafe_id: string | null = null) => {
     data: cafe_data,
     error: cafe_error,
     isLoading: cafe_isLoading,
-    refetch: cafe_refetch,
   } = useQuery({
     queryKey: ['cafes'],
     queryFn: fetchCafes,
@@ -95,7 +93,7 @@ export const EmployeePageTemplate = (cafe_id: string | null = null) => {
     return (
       <>
         <>
-          { cafe_id.cafe_id ? <p>Displaying Employees for: <b>{selected_cafe_info?.name} - {selected_cafe_info?.id}</b> only.</p> : 
+          { cafe_id?.cafe_id ? <p>Displaying Employees for: <b>{selected_cafe_info?.name} - {selected_cafe_info?.id}</b> only.</p> : 
           <p>Displaying all employee data.</p>
           }
         </>
@@ -122,7 +120,7 @@ export const EmployeePageTemplate = (cafe_id: string | null = null) => {
         </Box>
         <EmployeeGrid
           ref={gridRef} // Attach the ref to the EmployeeGrid
-          isDarkMode={isDarkMode}
+          isDarkMode={useTheme().palette.mode}
           employee_data={search_filtered_data}
           loading={employee_isLoading}
           onEditEmployee={handleEditCafe}

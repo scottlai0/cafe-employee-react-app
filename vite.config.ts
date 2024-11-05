@@ -4,5 +4,6 @@ import { TanStackRouterVite } from '@tanstack/router-vite-plugin'
 
 // https://vite.dev/config/
 export default defineConfig({
+  //base: "/cafe-employee-react-app/",
   plugins: [react(), TanStackRouterVite()],
 })
