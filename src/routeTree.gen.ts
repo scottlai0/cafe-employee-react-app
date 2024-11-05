@@ -20,25 +20,25 @@ import { Route as EmployeesCafeidImport } from './routes/employees/$cafe_id'
 
 const CafesRoute = CafesImport.update({
   id: '/cafes',
-  path: '/cafes',
+  path: '/cafe-employee-react-app/cafes',
   getParentRoute: () => rootRoute,
 } as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
-  path: '/',
+  path: '/cafe-employee-react-app/',
   getParentRoute: () => rootRoute,
 } as any)
 
 const EmployeesIndexRoute = EmployeesIndexImport.update({
   id: '/employees/',
-  path: '/employees/',
+  path: '/cafe-employee-react-app/employees/',
   getParentRoute: () => rootRoute,
 } as any)
 
 const EmployeesCafeidRoute = EmployeesCafeidImport.update({
   id: '/employees/$cafe_id',
-  path: '/employees/$cafe_id',
+  path: '/cafe-employee-react-app/employees/$cafe_id',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -152,7 +152,7 @@ export const routeTree = rootRoute
       "filePath": "employees/$cafe_id.tsx"
     },
     "/employees/": {
-      "filePath": "employees/index.tsx"
+      "filePath": "employees/index.js"
     }
   }
 }
