@@ -1,23 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-
-
 import EditIcon from '@mui/icons-material/Edit';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-
-
-import { Autocomplete, createTheme, Divider, FormControl, styled, TextField, ThemeProvider } from '@mui/material';
-
+import { Autocomplete, createTheme, Divider, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField, ThemeProvider } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import { addEmployee, updateEmployee } from '../services/employees-service';
+import dayjs from 'dayjs';
 
 const style = {
   position: 'relative',
@@ -30,7 +25,6 @@ const style = {
   borderRadius: '10px',
   p: 4,
 };
-
 
 const buttonTheme = createTheme({
   palette: {
@@ -52,13 +46,10 @@ export default function AddEditEmployeeModal({
   onClose, 
   onSuccess,
 }) {
-
-  const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm();
-
-  const cafe_options = cafe_data?.map((e: any) => {
-    return { id: e.id, name: e.name }
-  })
-
+  const { register, handleSubmit, setValue, watch, control, formState: { errors } } = useForm();
+  
+  const cafe_options = cafe_data?.map((e: any) => ({ id: e.id, name: e.name }));
+  
   const resetValues = () => {
     setValue('employee_id', '');
     setValue('name', '');
@@ -69,13 +60,9 @@ export default function AddEditEmployeeModal({
     setValue('cafe_name', selected_cafe_info?.name || '');
     setValue('start_date', null);
     setValue('end_date', null);
-  }
-
-  const cafe_id = watch('cafe_id')
-  const cafe_name = watch('cafe_name')
+  };
 
   useEffect(() => {
-    // Prefill values only if in edit mode and employee_data exists
     if (isEditMode && employee_data) {
       setValue('employee_id', employee_data.id || '');
       setValue('name', employee_data.name || '');
@@ -85,25 +72,20 @@ export default function AddEditEmployeeModal({
       setValue('cafe_id', employee_data.cafe_id || selected_cafe_info?.id || null);
       setValue('cafe_name', employee_data.cafe_name || selected_cafe_info?.name || null);
       setValue('start_date', employee_data.start_date || null);
-      setValue('end_date', employee_data.end_date || null)
+      setValue('end_date', employee_data.end_date || null);
     } else {
-      // Reset for new employees
-      resetValues()
+      resetValues();
     }
   }, [isEditMode, employee_data, setValue]);
 
   const handleCloseModal = () => {
     resetValues();
     onClose();
-  }
+  };
 
   const mutation = useMutation({
     mutationFn: async (formData: FormData) => {
-      if (isEditMode) {
-        return await updateEmployee(formData);
-      } else {
-        return await addEmployee(formData);
-      }
+      return isEditMode ? await updateEmployee(formData) : await addEmployee(formData);
     },
     onSuccess: () => {
       onSuccess();
@@ -114,9 +96,8 @@ export default function AddEditEmployeeModal({
     }
   });
 
-
   const onSubmit = async (data: any) => {
-    const newData: any = {
+    const newData = {
       id: employee_data?.id,
       name: data.name,
       email_address: data.email_address,
@@ -125,30 +106,26 @@ export default function AddEditEmployeeModal({
       cafe_id: data.cafe_id,
       cafe_name: data.cafe_name,
       start_date: data.start_date,
-      end_date: data.end_date
-    }
-
-    console.log(newData)
+      end_date: data.end_date,
+    };
 
     mutation.mutate(newData);
   };
 
-  // Cafe Dropdown config 
   const handleCafeNameChange = (event, new_value) => {
-    if (new_value) {
-      setValue('cafe_id', new_value.id);
-      setValue('cafe_name', new_value.name); // Add this line to set cafe_name
-    } else {
-      setValue('cafe_id', '');
-      setValue('cafe_name', ''); // Also clear cafe_name when no cafe is selected
-    }
-  }
-  
+    setValue('cafe_id', new_value ? new_value.id : '');
+    setValue('cafe_name', new_value ? new_value.name : '');
+  };
+
   return (
     <div>
       <Modal
         open={open}
-        onClose={onClose}
+        onClose={(event, reason) => {
+          if (reason !== 'backdropClick') {
+            onClose();
+          }
+        }}
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h5" sx={{ fontWeight: 'bold' }}>
@@ -175,7 +152,17 @@ export default function AddEditEmployeeModal({
               />
               <TextField
                 label="Name"
-                {...register('name', { required: '* Name is required' })}
+                {...register('name', { 
+                  required: '* Name is required',
+                  minLength: {
+                    value: 6,
+                    message: 'Minimum character count is 6.'
+                  },
+                  maxLength: {
+                    value: 10,
+                    message: 'Maximum character count is 10.'
+                  }
+                })}
                 error={!!errors.name}
                 helperText={errors.name ? errors.name.message : ''}
               />
@@ -203,40 +190,49 @@ export default function AddEditEmployeeModal({
                 error={!!errors.phone_number}
                 helperText={errors.phone_number ? errors.phone_number.message : ''}
               />
-              <TextField
-                label="Gender"
-                {...register('gender', { 
-                  required: '* Gender is required',
-                  pattern: {
-                    value: /^[MF]$/,
-                    message: 'Enter M for male and F for female.'
-                  }
-                })}
-                error={!!errors.gender}
-                helperText={errors.gender ? errors.gender.message : ''}
-              />
-
+              <FormControl>
+                <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel>
+                <Controller
+                  name="gender"
+                  control={control}
+                  rules={{ required: '* Gender is required' }}
+                  render={({ field }) => (
+                    <RadioGroup
+                      {...field}
+                      row
+                      onChange={(e) => field.onChange(e.target.value)} // Set the gender value
+                    >
+                      <FormControlLabel value="Female" control={<Radio />} label="Female" />
+                      <FormControlLabel value="Male" control={<Radio />} label="Male" />
+                      <FormControlLabel value="Other" control={<Radio />} label="Other" />
+                    </RadioGroup>
+                  )}
+                />
+                {errors.gender && (
+                  <Typography variant="body2" color="error">
+                    {errors.gender.message}
+                  </Typography>
+                )}
+              </FormControl>
               <Divider />
 
               <Typography sx={{ mt: 1 }}>Employment details</Typography>
-              <Box sx = {{ display: 'flex', gap: 2}}>
+              <Box sx={{ display: 'flex', gap: 2 }}>
                 <TextField 
-                  sx = {{ width: '40%' }}
+                  sx={{ width: '40%' }}
                   label="Cafe ID"
                   disabled={true}
-                  value={cafe_id ? cafe_id : ''}
+                  value={watch('cafe_id') || ''}
                 />
                 <Autocomplete
                   id="cafe_dropdown"
-                  // Set value to the entire object if available, otherwise null
-                  value={cafe_options?.find(option => option.name === cafe_name) || null}
+                  value={cafe_options?.find(option => option.name === watch('cafe_name')) || null}
                   sx={{ width: '100%' }}
                   options={cafe_options}
                   getOptionLabel={(option) => option.name || ''}
                   renderInput={(params) => (
                     <TextField {...params} label="Cafe Name" />
                   )}
-                  disabled={!!selected_cafe_info?.id}
                   onChange={handleCafeNameChange}
                 />
               </Box>
@@ -244,18 +240,14 @@ export default function AddEditEmployeeModal({
               <Box sx={{ display: 'flex', gap: 2 }}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker 
-                    onChange={(date) => {
-                      const formatted_date = date.toISOString().split('T')[0]
-                      setValue('start_date', formatted_date)
-                    }}
+                    value={watch('start_date') ? dayjs(watch('start_date')) : null}
+                    onChange={(date) => setValue('start_date', date ? date.format('YYYY-MM-DD') : null)}
                     sx={{ width: '100%' }} 
                     label="Start Date"
                   />
                   <DatePicker 
-                    onChange={(date) => {
-                      const formatted_date = date.toISOString().split('T')[0]
-                      setValue('end_date', formatted_date)
-                    }}
+                    value={watch('end_date') ? dayjs(watch('end_date')) : null} 
+                    onChange={(date) => setValue('end_date', date ? date.format('YYYY-MM-DD') : null)}
                     sx={{ width: '100%' }} 
                     label="End Date" 
                   />
@@ -265,15 +257,13 @@ export default function AddEditEmployeeModal({
               <Divider />
 
               <Box sx={{ display: 'flex', justifyContent: 'flex-end', py: 1, gap: 1 }}>
-                <ThemeProvider theme={{ buttonTheme }}>
-                  <Button
-                    type="submit"
-                    color="primary"
-                    variant="contained"                   
-                  >
-                    {isEditMode ? 'Update Cafe' : 'Add Cafe'}
+                <ThemeProvider theme={buttonTheme}>
+                  <Button type="submit" color="primary" variant="contained">
+                    {isEditMode ? 'Update Employee' : 'Add Employee'}
                   </Button>
-                  <Button color="secondary" variant="contained" onClick={handleCloseModal}>Close</Button>
+                  <Button color="secondary" variant="contained" onClick={handleCloseModal}>
+                    Close
+                  </Button>
                 </ThemeProvider>
               </Box>
             </FormControl>

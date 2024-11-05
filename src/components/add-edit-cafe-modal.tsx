@@ -49,8 +49,9 @@ const buttonTheme = createTheme({
   },
 });
 
+
 export default function AddEditCafeModal({ cafe_data, isEditMode, open, onClose, onSuccess }) {
-  const { register, handleSubmit, setValue, formState: { errors } } = useForm();
+  const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm();
 
   // State to hold logo file
   const [logo, setLogo] = useState<File | null>(null);
@@ -74,7 +75,23 @@ export default function AddEditCafeModal({ cafe_data, isEditMode, open, onClose,
     }
   }, [isEditMode, cafe_data, setValue]);
 
-  const handleCloseModal = () => {
+  const cafe_id = watch('cafe_id');
+  const name = watch('name');
+  const description = watch('description');
+  const location = watch('location');
+
+
+  const confirmCloseModal = () => {
+    if (cafe_id !== '' || name !== '' || description !== '' || location !== '' || logo ) {
+      if (confirm('Are you sure you want to close? Unsaved changes will be lost.')) {
+        closeModal() 
+      } 
+    } else {
+      closeModal()
+    }
+  }
+
+  const closeModal = () => {
     // Reset for new cafes
     setValue('cafe_id', ''); 
     setValue('name', '');
@@ -94,7 +111,7 @@ export default function AddEditCafeModal({ cafe_data, isEditMode, open, onClose,
     },
     onSuccess: () => {
       onSuccess();
-      handleCloseModal();
+      closeModal();
     },
     onError: (error) => {
       console.error("Error:", error);
@@ -156,7 +173,11 @@ export default function AddEditCafeModal({ cafe_data, isEditMode, open, onClose,
     <div>
       <Modal
         open={open}
-        onClose={onClose}
+        onClose={(event, reason) => {
+          if (reason !== 'backdropClick') {
+            onClose();
+          }
+        }}
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h5" sx={{ fontWeight: 'bold' }}>
@@ -183,13 +204,28 @@ export default function AddEditCafeModal({ cafe_data, isEditMode, open, onClose,
               />
               <TextField 
                 label="Name"
-                {...register('name', { required: '* Name is required' })}
+                {...register('name', { 
+                  required: '* Name is required',
+                  minLength: {
+                    value: 6,
+                    message: 'Minimum character count is 6.'
+                  },
+                  maxLength: {
+                    value: 10,
+                    message: 'Maximum character count is 10.'
+                  }
+                })}
                 error={!!errors.name}
                 helperText={errors.name ? errors.name.message : ''}
               />
               <TextField 
                 label="Description"
-                {...register('description')}
+                {...register('description', {
+                  maxLength: {
+                    value: 256,
+                    message: 'Maximum character count is 256.'
+                  }
+                })}
                 error={!!errors.description}
                 helperText={errors.description ? errors.description.message : ''}
               />
@@ -218,7 +254,7 @@ export default function AddEditCafeModal({ cafe_data, isEditMode, open, onClose,
                   { logo && <>{logo?.name} uploaded!</> }
                 </Typography>
                 <Typography sx={{ color: 'red', fontSize: 'small' }}>
-                  { logoError && logoError }
+                  { logoError && `*${logoError}` }
                 </Typography>
               </Box>
 
@@ -237,7 +273,7 @@ export default function AddEditCafeModal({ cafe_data, isEditMode, open, onClose,
                   <Button 
                     color="secondary" 
                     variant="contained" 
-                    onClick={handleCloseModal}
+                    onClick={confirmCloseModal}
                   >
                     Close
                   </Button>
