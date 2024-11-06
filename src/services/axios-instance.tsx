@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-//const HOST_URL = 'http://localhost:8000/'
-const HOST_URL = 'https://sample-fastapi-cafe-employee.onrender.com'
+const HOST_URL = 'http://localhost:8000/'
+//const HOST_URL = 'https://sample-fastapi-cafe-employee.onrender.com'
 
 export const axiosInstance = axios.create({
   baseURL: HOST_URL,

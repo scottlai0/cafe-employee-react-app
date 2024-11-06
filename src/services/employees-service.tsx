@@ -1,7 +1,7 @@
 import { axiosInstance } from './axios-instance';
 
 export const fetchEmployees = async () => {
-  const response = await axiosInstance.get('/employees'); 
+  const response = await axiosInstance.get(`/employees`); 
   return response.data;
 };
 

@@ -39,12 +39,16 @@ export const EmployeePageTemplate = (cafe_id: any = null) => {
 
   const cafeQuery = useQuery({
     queryKey: ['cafes'],
+    enabled: true,
     queryFn: fetchCafes,
+    refetchInterval: 1000 * 60 * 2,
   });
 
   const employeeQuery = useQuery({
     queryKey: ['employees'],
+    enabled: true,
     queryFn: fetchEmployees,
+    refetchInterval: 1000 * 60 * 2,
   });
   
   // If page is accessed through Cafe page's column selection, filter the employee data based on the Cafe's ID

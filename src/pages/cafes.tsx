@@ -41,6 +41,7 @@ const CafePage = () => {
   const cafeQuery  = useQuery({
     queryKey: ['cafes'],
     queryFn: fetchCafes,
+    refetchInterval: 1000 * 60 * 2,
   });
 
   // For filtering values in AGGrid based on search bar
