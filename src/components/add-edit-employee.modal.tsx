@@ -8,7 +8,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { Autocomplete, createTheme, Divider, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, styled, TextField, ThemeProvider } from '@mui/material';
+import { Autocomplete, createTheme, Divider, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField, ThemeProvider } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import { addEmployee, updateEmployee } from '../services/employees-service';
