@@ -252,7 +252,7 @@ export default function AddEditEmployeeModal({
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker 
                     value={watch('start_date') ? dayjs(watch('start_date')) : null}
-                    onChange={(date: dayjs.Dayjs) => setValue('start_date', date ? date.format('YYYY-MM-DD') : null)}
+                    onChange={(date) => setValue('start_date', date ? date.format('YYYY-MM-DD') : null)}
                     sx={{ width: '100%' }} 
                     label="Start Date"
                   />
