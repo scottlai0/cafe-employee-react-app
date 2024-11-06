@@ -78,57 +78,57 @@ export const EmployeePageTemplate = (cafe_id: any = null) => {
         <p>Loading Employees...</p>
       </Box>
     );
-  } else if (cafeQuery.error) {
-    return <p>Error loading cafes: {cafeQuery.error.message}</p>;
-  } else if (employeeQuery.error) {
-    return <p>Error loading employees: {employeeQuery.error.message}</p> 
-  } else {
-    return (
+  } 
+  
+  if (cafeQuery.error) return <p>Error loading cafes: {cafeQuery.error.message}</p>;
+  if (employeeQuery.error) return <p>Error loading employees: {employeeQuery.error.message}</p> 
+
+  return (
+    <>
       <>
-        <>
-          { cafe_id?.cafe_id ? <p>Displaying Employees for: <b>{selected_cafe_info?.name} - {selected_cafe_info?.id}</b> only.</p> : 
-          <p>Displaying all employee data.</p>
-          }
-        </>
-        <Box sx={{ display: 'flex', py: 2, justifyContent: 'space-between', gap: 2 }}>
-          <Button variant="contained" onClick={handleOpenModal}>
-            <AddHomeWorkTwoToneIcon sx={{ mr: 1 }} />
-            Add New Employee
-          </Button>
-          <Box sx={{ display: 'flex', gap: 2 }}>
-            <Button variant="outlined" onClick={resizeColumnsToFit}> {/* Button to trigger resizing */}
-              Autoresize Columns
-            </Button>
-            <TextField
-              variant="outlined"
-              size="small"
-              placeholder="Search..."
-              onChange={(e) => setSearchTerm(e.target.value)}
-              InputProps={{
-                endAdornment: <SearchIcon />,
-              }}
-            />
-          </Box>
-          
-        </Box>
-        <EmployeeGrid
-          ref={gridRef} // Attach the ref to the EmployeeGrid
-          isDarkMode={isDarkMode}
-          employee_data={search_filtered_data}
-          loading={employeeQuery.isLoading}
-          onEditEmployee={handleEditCafe}
-          onRefresh={employeeQuery.refetch}
-        />
-        <AddEditEmployeeModal
-          cafe_data={cafeQuery.data}
-          selected_cafe_info={selected_cafe_info}
-          employee_data={selectedEmployee}
-          isEditMode={isEditMode}
-          open={isModalOpen}
-          onClose={handleCloseModal}
-          onSuccess={employeeQuery.refetch}
-        />
+        { cafe_id?.cafe_id ? <p>Displaying Employees for: <b>{selected_cafe_info?.name} - {selected_cafe_info?.id}</b> only.</p> : 
+        <p>Displaying all employee data.</p>
+        }
       </>
-    );
-  }
+      <Box sx={{ display: 'flex', py: 2, justifyContent: 'space-between', gap: 2 }}>
+        <Button variant="contained" onClick={handleOpenModal}>
+          <AddHomeWorkTwoToneIcon sx={{ mr: 1 }} />
+          Add New Employee
+        </Button>
+        <Box sx={{ display: 'flex', gap: 2 }}>
+          <Button variant="outlined" onClick={resizeColumnsToFit}> {/* Button to trigger resizing */}
+            Autoresize Columns
+          </Button>
+          <TextField
+            variant="outlined"
+            size="small"
+            placeholder="Search..."
+            onChange={(e) => setSearchTerm(e.target.value)}
+            InputProps={{
+              endAdornment: <SearchIcon />,
+            }}
+          />
+        </Box>
+        
+      </Box>
+      <EmployeeGrid
+        ref={gridRef} // Attach the ref to the EmployeeGrid
+        isDarkMode={isDarkMode}
+        employee_data={search_filtered_data}
+        loading={employeeQuery.isLoading}
+        onEditEmployee={handleEditCafe}
+        onRefresh={employeeQuery.refetch}
+      />
+      <AddEditEmployeeModal
+        cafe_data={cafeQuery.data}
+        selected_cafe_info={selected_cafe_info}
+        employee_data={selectedEmployee}
+        isEditMode={isEditMode}
+        open={isModalOpen}
+        onClose={handleCloseModal}
+        onSuccess={employeeQuery.refetch}
+      />
+    </>
+  );
+
 };
