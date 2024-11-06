@@ -11,7 +11,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { createTheme, Divider, FormControl, styled, TextField, ThemeProvider } from '@mui/material';
 
 import { useForm } from 'react-hook-form';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { updateCafe, addCafe } from '../services/cafes-service';
 
 const style = {
@@ -101,7 +101,8 @@ export default function AddEditCafeModal({ cafe_data, isEditMode, open, onClose,
     onClose()
   }
 
-  const mutation = useMutation({
+  const queryClient = useQueryClient();
+  const submitCafeMutation = useMutation({
     mutationFn: async (formData: FormData) => {
       if (isEditMode) {
         return await updateCafe(formData);
@@ -110,6 +111,9 @@ export default function AddEditCafeModal({ cafe_data, isEditMode, open, onClose,
       }
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["employees"]
+      });
       onSuccess();
       closeModal();
     },
@@ -158,13 +162,13 @@ export default function AddEditCafeModal({ cafe_data, isEditMode, open, onClose,
         const encodedLogo = btoa(stringData);
         newData.logo = encodedLogo;
   
-        mutation.mutate(newData);
+        submitCafeMutation.mutate(newData);
       };
       reader.readAsArrayBuffer(logo); 
       // Read the logo file as an ArrayBuffer
     
     } else {
-      mutation.mutate(newData);
+      submitCafeMutation.mutate(newData);
     }
   };
 

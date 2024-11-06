@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Box, Button, CircularProgress, PaletteMode, TextField, useTheme } from '@mui/material';
+import { Box, Button, LinearProgress, PaletteMode, TextField, Typography, useTheme } from '@mui/material';
 import { fetchEmployees } from '../services/employees-service';
 import EmployeeGrid from '../components/employee-table';
 import AddHomeWorkTwoToneIcon from '@mui/icons-material/AddHomeWorkTwoTone';
@@ -51,6 +51,7 @@ export const EmployeePageTemplate = (cafe_id: any = null) => {
     refetchInterval: 1000 * 60 * 2,
   });
   
+  
   // If page is accessed through Cafe page's column selection, filter the employee data based on the Cafe's ID
   const filtered_data = cafe_id?.cafe_id ? employeeQuery.data?.filter((e: any) => e.cafe_id === cafe_id.cafe_id) : employeeQuery.data
   const selected_cafe_info = cafe_id?.cafe_id ? cafeQuery.data?.filter((e: any) => e.id === cafe_id.cafe_id)[0] : null
@@ -77,15 +78,15 @@ export const EmployeePageTemplate = (cafe_id: any = null) => {
 
   if ( cafeQuery.isLoading || employeeQuery.isLoading ) {
     return (
-      <Box sx={{ display: 'flex' }}>
-        <CircularProgress sx={{ mr: 1 }} />
-        <p>Loading Employees...</p>
-      </Box>
+      <>
+      <LinearProgress />
+      <Typography sx={{ mt: 1}}>Loading employee data...</Typography>
+    </>
     );
   } 
   
-  if (cafeQuery.error) return <p>Error loading cafes: {cafeQuery.error.message}</p>;
-  if (employeeQuery.error) return <p>Error loading employees: {employeeQuery.error.message}</p> 
+  if (cafeQuery.error) return <p>Error loading cafes data: {cafeQuery.error.message}</p>;
+  if (employeeQuery.error) return <p>Error loading employees data: {employeeQuery.error.message}</p> 
 
   return (
     <>

@@ -7,7 +7,7 @@ import AddEditCafeModal from "../components/add-edit-cafe-modal";
 import { fetchCafes } from "../services/cafes-service";
 
 
-import { Box, Button, CircularProgress, TextField, useTheme } from "@mui/material";
+import { Box, Button, LinearProgress, TextField, Typography, useTheme } from "@mui/material";
 
 import AddHomeWorkTwoToneIcon from '@mui/icons-material/AddHomeWorkTwoTone';
 import SearchIcon from '@mui/icons-material/Search';
@@ -56,48 +56,50 @@ const CafePage = () => {
 
   if (cafeQuery.isLoading) {
     return (
-      <Box sx={{ display: 'flex' }}>
-        <CircularProgress sx={{ mr: 1 }} />
-        <p>Loading cafes...</p>
-      </Box>
-    );
-  } else if (cafeQuery.error) {
-    return <p>Error loading cafes: {cafeQuery.error.message}</p>;
-  } else {
-    return (
       <>
-        <Box sx={{ display: 'flex', py: 2, justifyContent: 'space-between', gap: 2 }}>
-          <Button variant="contained" onClick={handleOpenModal}>
-            <AddHomeWorkTwoToneIcon sx={{ mr: 1 }} />
-            Add New Café
-          </Button>
-          <TextField
-            variant="outlined"
-            size="small"
-            placeholder="Search..."
-            onChange={(e) => setSearchTerm(e.target.value)}
-            InputProps={{
-              endAdornment: <SearchIcon />,
-            }}
-          />
-        </Box>
-        <CafeGrid 
-          isDarkMode={isDarkMode} 
-          cafe_data={filtered_data} 
-          loading={cafeQuery.isLoading} 
-          onEditCafe={handleEditCafe}
-          onRefresh={cafeQuery.refetch} // Pass the refetch function to CafeGrid
-        />
-        <AddEditCafeModal 
-          cafe_data={selectedCafe} 
-          isEditMode={isEditMode} 
-          open={isModalOpen} 
-          onClose={handleCloseModal} 
-          onSuccess={cafeQuery.refetch} // Call refetch on success
-        />
+        <LinearProgress />
+        <Typography sx={{ mt: 1}}>Loading cafe data...</Typography>
       </>
     );
-  }
+  } 
+  
+  if (cafeQuery.error) {
+    return <p>Error loading cafes: {cafeQuery.error.message}</p>;
+  } 
+  
+  return (
+    <>
+      <Box sx={{ display: 'flex', py: 2, justifyContent: 'space-between', gap: 2 }}>
+        <Button variant="contained" onClick={handleOpenModal}>
+          <AddHomeWorkTwoToneIcon sx={{ mr: 1 }} />
+          Add New Café
+        </Button>
+        <TextField
+          variant="outlined"
+          size="small"
+          placeholder="Search..."
+          onChange={(e) => setSearchTerm(e.target.value)}
+          InputProps={{
+            endAdornment: <SearchIcon />,
+          }}
+        />
+      </Box>
+      <CafeGrid 
+        isDarkMode={isDarkMode} 
+        cafe_data={filtered_data} 
+        loading={cafeQuery.isLoading} 
+        onEditCafe={handleEditCafe}
+        onRefresh={cafeQuery.refetch} // Pass the refetch function to CafeGrid
+      />
+      <AddEditCafeModal 
+        cafe_data={selectedCafe} 
+        isEditMode={isEditMode} 
+        open={isModalOpen} 
+        onClose={handleCloseModal} 
+        onSuccess={cafeQuery.refetch} // Call refetch on success
+      />
+    </>
+  );
 };
 
 export default CafePage;

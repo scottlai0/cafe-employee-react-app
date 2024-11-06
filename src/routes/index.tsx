@@ -1,4 +1,4 @@
-import { Divider } from '@mui/material'
+import { Card, CardActionArea, CardContent, Divider, Typography } from '@mui/material'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/')({
@@ -6,9 +6,33 @@ export const Route = createFileRoute('/')({
     <div>
       <h1>Cafe-Employee Management Portal</h1>
       <Divider />
-      <p>This is a experimental project built using Vite + React.</p>
-      <p>API is built with FastAPI</p>
-      <p>Database is a simple SQLite file.</p>
+      <Card>
+        <CardActionArea>
+          <CardContent>
+            <Typography 
+              variant="h6" 
+              sx={{ fontWeight: 'bold'}}
+            >
+              Frontend: Vite + React
+            </Typography>
+            <ul>
+              <li>Routing: Tanstack Router</li>
+              <li>State Management: React Query (TanStack Query)</li>
+            </ul>
+            <Typography 
+              variant="h6"
+              sx={{ fontWeight: 'bold'}}
+            >
+              API: FastAPI
+            </Typography>
+            <Typography 
+              variant="h6"
+            >
+              Database: SQLite
+            </Typography>
+          </CardContent>
+        </CardActionArea>
+      </Card>
     </div>
   ),
 })
