@@ -20,9 +20,6 @@ const CafePage = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [selectedCafe, setSelectedCafe] = useState(null);
   
-  // For filtering values in AGGrid based on search bar
-  const [searchTerm, setSearchTerm] = useState("");
-
   const handleOpenModal = () => {
     setIsEditMode(false);
     setSelectedCafe(null);
@@ -41,28 +38,30 @@ const CafePage = () => {
   };
 
   // To fetch cafe data
-  const { data, error, isLoading, refetch } = useQuery({
+  const cafeQuery  = useQuery({
     queryKey: ['cafes'],
     queryFn: fetchCafes,
   });
 
+  // For filtering values in AGGrid based on search bar
+  const [searchTerm, setSearchTerm] = useState("");
   // Filter cafes based on search term
-  const filtered_data = data?.filter((cafe: any) =>
+  const filtered_data = cafeQuery.data?.filter((cafe: any) =>
 		cafe.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
     cafe.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     cafe.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
     cafe.location.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  if (isLoading) {
+  if (cafeQuery.isLoading) {
     return (
       <Box sx={{ display: 'flex' }}>
         <CircularProgress sx={{ mr: 1 }} />
         <p>Loading cafes...</p>
       </Box>
     );
-  } else if (error) {
-    return <p>Error loading cafes: {error.message}</p>;
+  } else if (cafeQuery.error) {
+    return <p>Error loading cafes: {cafeQuery.error.message}</p>;
   } else {
     return (
       <>
@@ -84,16 +83,16 @@ const CafePage = () => {
         <CafeGrid 
           isDarkMode={isDarkMode} 
           cafe_data={filtered_data} 
-          loading={isLoading} 
+          loading={cafeQuery.isLoading} 
           onEditCafe={handleEditCafe}
-          onRefresh={refetch} // Pass the refetch function to CafeGrid
+          onRefresh={cafeQuery.refetch} // Pass the refetch function to CafeGrid
         />
         <AddEditCafeModal 
           cafe_data={selectedCafe} 
           isEditMode={isEditMode} 
           open={isModalOpen} 
           onClose={handleCloseModal} 
-          onSuccess={refetch} // Call refetch on success
+          onSuccess={cafeQuery.refetch} // Call refetch on success
         />
       </>
     );

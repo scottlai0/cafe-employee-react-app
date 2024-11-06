@@ -34,21 +34,25 @@ const ConfirmDeleteEmployeeModal = ({ open, onClose, onConfirm, selectedEmployee
               label="Name"
               value={selectedEmployee?.name || ''}
               disabled={true}
+              size="small"
             />
             <TextField 
               label="Email Address"
               value={selectedEmployee?.email_address || ''}
               disabled={true}
+              size="small"
             />
             <TextField 
               label="Phone Number"
               value={selectedEmployee?.phone_number || ''}
               disabled={true}
+              size="small"
             />
             <TextField 
               label="Gender"
               value={selectedEmployee?.gender || ''}
               disabled={true}
+              size="small"
             />
           </Box>
         </Box>

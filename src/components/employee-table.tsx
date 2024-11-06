@@ -35,6 +35,11 @@ const EmployeeGrid = forwardRef(({
           minWidth: 140
         },
         {
+          headerName: 'Email',
+          field: 'email_address',
+          minWidth: 250,
+        },
+        {
           headerName: 'Phone Number',
           field: 'phone_number',
           minWidth: 140
@@ -42,7 +47,7 @@ const EmployeeGrid = forwardRef(({
         {
           headerName: 'Gender',
           field: 'gender',
-          mindWith: 80
+          minWidth: 80
         },
       ]
     },

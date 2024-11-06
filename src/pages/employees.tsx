@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Box, Button, CircularProgress, TextField, useTheme } from '@mui/material';
+import { Box, Button, CircularProgress, PaletteMode, TextField, useTheme } from '@mui/material';
 import { fetchEmployees } from '../services/employees-service';
 import EmployeeGrid from '../components/employee-table';
 import AddHomeWorkTwoToneIcon from '@mui/icons-material/AddHomeWorkTwoTone';
@@ -17,6 +17,8 @@ export const EmployeePageTemplate = (cafe_id: any = null) => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+
+  const isDarkMode: PaletteMode = useTheme().palette.mode
 
   const handleOpenModal = () => {
     setIsEditMode(false);
@@ -35,28 +37,19 @@ export const EmployeePageTemplate = (cafe_id: any = null) => {
     setSelectedEmployee(null);
   };
 
-  const {
-    data: cafe_data,
-    error: cafe_error,
-    isLoading: cafe_isLoading,
-  } = useQuery({
+  const cafeQuery = useQuery({
     queryKey: ['cafes'],
     queryFn: fetchCafes,
   });
 
-  const {
-    data: employee_data,
-    error: employee_error,
-    isLoading: employee_isLoading,
-    refetch: employee_refetch,
-  } = useQuery({
+  const employeeQuery = useQuery({
     queryKey: ['employees'],
     queryFn: fetchEmployees,
   });
   
   // If page is accessed through Cafe page's column selection, filter the employee data based on the Cafe's ID
-  const filtered_data = cafe_id?.cafe_id ? employee_data?.filter((e: any) => e.cafe_id === cafe_id.cafe_id) : employee_data
-  const selected_cafe_info = cafe_id?.cafe_id ? cafe_data?.filter((e: any) => e.id === cafe_id.cafe_id)[0] : null
+  const filtered_data = cafe_id?.cafe_id ? employeeQuery.data?.filter((e: any) => e.cafe_id === cafe_id.cafe_id) : employeeQuery.data
+  const selected_cafe_info = cafe_id?.cafe_id ? cafeQuery.data?.filter((e: any) => e.id === cafe_id.cafe_id)[0] : null
 
   // Filter cafes based on search term
   const search_filtered_data = filtered_data?.filter((employee: any) =>
@@ -78,17 +71,17 @@ export const EmployeePageTemplate = (cafe_id: any = null) => {
     }
   };
 
-  if ( cafe_isLoading || employee_isLoading ) {
+  if ( cafeQuery.isLoading || employeeQuery.isLoading ) {
     return (
       <Box sx={{ display: 'flex' }}>
         <CircularProgress sx={{ mr: 1 }} />
         <p>Loading Employees...</p>
       </Box>
     );
-  } else if (cafe_error) {
-    return <p>Error loading cafes: {cafe_error.message}</p>;
-  } else if (employee_error) {
-    return <p>Error loading employees: {employee_error.message}</p> 
+  } else if (cafeQuery.error) {
+    return <p>Error loading cafes: {cafeQuery.error.message}</p>;
+  } else if (employeeQuery.error) {
+    return <p>Error loading employees: {employeeQuery.error.message}</p> 
   } else {
     return (
       <>
@@ -104,7 +97,7 @@ export const EmployeePageTemplate = (cafe_id: any = null) => {
           </Button>
           <Box sx={{ display: 'flex', gap: 2 }}>
             <Button variant="outlined" onClick={resizeColumnsToFit}> {/* Button to trigger resizing */}
-              Resize Columns
+              Autoresize Columns
             </Button>
             <TextField
               variant="outlined"
@@ -120,20 +113,20 @@ export const EmployeePageTemplate = (cafe_id: any = null) => {
         </Box>
         <EmployeeGrid
           ref={gridRef} // Attach the ref to the EmployeeGrid
-          isDarkMode={useTheme().palette.mode}
+          isDarkMode={isDarkMode}
           employee_data={search_filtered_data}
-          loading={employee_isLoading}
+          loading={employeeQuery.isLoading}
           onEditEmployee={handleEditCafe}
-          onRefresh={employee_refetch}
+          onRefresh={employeeQuery.refetch}
         />
         <AddEditEmployeeModal
-          cafe_data={cafe_data}
+          cafe_data={cafeQuery.data}
           selected_cafe_info={selected_cafe_info}
           employee_data={selectedEmployee}
           isEditMode={isEditMode}
           open={isModalOpen}
           onClose={handleCloseModal}
-          onSuccess={employee_refetch}
+          onSuccess={employeeQuery.refetch}
         />
       </>
     );

@@ -8,7 +8,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { Autocomplete, createTheme, Divider, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField, ThemeProvider } from '@mui/material';
+import { Autocomplete, createTheme, Divider, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, styled, TextField, ThemeProvider } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import { addEmployee, updateEmployee } from '../services/employees-service';
@@ -36,6 +36,7 @@ const buttonTheme = createTheme({
     },
   },
 });
+
 
 export default function AddEditEmployeeModal({ 
   cafe_data, 
@@ -153,6 +154,7 @@ export default function AddEditEmployeeModal({
                 label="Employee ID"
                 defaultValue={isEditMode ? employee_data?.id : 'Employee ID will be auto-generated upon submission'}
                 disabled={true}
+                size="small"
               />
               <TextField
                 label="Name"
@@ -167,6 +169,7 @@ export default function AddEditEmployeeModal({
                     message: 'Maximum character count is 50.'
                   }
                 })}
+                size="small"
                 error={!!errors.name}
                 helperText={errors.name ? errors.name?.message : ''}
               />
@@ -179,6 +182,7 @@ export default function AddEditEmployeeModal({
                     message: 'Invalid email format.'
                   }
                 })}
+                size="small"
                 error={!!errors.email_address}
                 helperText={errors.email_address ? errors.email_address?.message : ''}
               />
@@ -191,6 +195,7 @@ export default function AddEditEmployeeModal({
                     message: 'Invalid phone number format.'
                   }
                 })}
+                size="small"
                 error={!!errors.phone_number}
                 helperText={errors.phone_number ? errors.phone_number?.message : ''}
               />
@@ -227,6 +232,7 @@ export default function AddEditEmployeeModal({
                   label="Cafe ID"
                   disabled={true}
                   value={watch('cafe_id') || ''}
+                  size="small"
                 />
                 <Autocomplete
                   id="cafe_dropdown"
@@ -238,6 +244,7 @@ export default function AddEditEmployeeModal({
                     <TextField {...params} label="Cafe Name" />
                   )}
                   onChange={handleCafeNameChange}
+                  size="small"
                 />
               </Box>
 
@@ -245,7 +252,7 @@ export default function AddEditEmployeeModal({
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker 
                     value={watch('start_date') ? dayjs(watch('start_date')) : null}
-                    onChange={(date) => setValue('start_date', date ? date.format('YYYY-MM-DD') : null)}
+                    onChange={(date: dayjs.Dayjs) => setValue('start_date', date ? date.format('YYYY-MM-DD') : null)}
                     sx={{ width: '100%' }} 
                     label="Start Date"
                   />

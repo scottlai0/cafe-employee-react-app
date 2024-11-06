@@ -29,21 +29,25 @@ const ConfirmDeleteCafeModal = ({ open, onClose, onConfirm, selectedCafe }: any)
               label="Cafe ID"
               value={selectedCafe?.id || ''} // Use id for Cafe ID
               disabled={true}
+              size="small"
             />
             <TextField
               label="Name"
               value={selectedCafe?.name || ''}
               disabled={true}
+              size="small"
             />
             <TextField 
               label="Description"
               value={selectedCafe?.description || ''}
               disabled={true}
+              size="small"
             />
             <TextField 
               label="Location"
               value={selectedCafe?.location || ''}
               disabled={true}
+              size="small"
             />
           </Box>
         </Box>
