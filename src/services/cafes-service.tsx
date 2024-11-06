@@ -2,6 +2,7 @@ import { axiosInstance } from "./axios-instance";
 
 export const fetchCafes = async () => {
   const response = await axiosInstance.get('/cafes');
+  console.log(response)
   return response.data;
 };
 
